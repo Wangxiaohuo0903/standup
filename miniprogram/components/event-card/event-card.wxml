@@ -1,0 +1,26 @@
+<view class="event-card" bindtap="handleCardTap" data-id="{{event.id}}">
+  <image src="{{event.poster}}" mode="aspectFill" class="poster" />
+  
+  <view class="info">
+    <view class="title">{{event.title}}</view>
+    
+    <view class="meta">
+      <image src="/assets/icon-time.png" class="icon" />
+      <text>{{event.date}} {{event.time}}</text>
+    </view>
+    
+    <view class="meta">
+      <image src="/assets/icon-location.png" class="icon" />
+      <text>{{event.venue}}</text>
+    </view>
+    
+    <view class="price-tag">
+      <text>¥{{event.minPrice}}</text>
+      <text wx:if="{{event.maxPrice > event.minPrice}}">起</text>
+    </view>
+    
+    <view wx:if="{{event.tags && event.tags.length > 0}}" class="tags">
+      <text wx:for="{{event.tags}}" wx:key="index" class="tag">{{item}}</text>
+    </view>
+  </view>
+</view>

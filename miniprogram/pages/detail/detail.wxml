@@ -1,0 +1,54 @@
+<view class="detail-container">
+  <!-- 演出海报 -->
+  <image src="{{event.poster}}" mode="widthFix" class="poster" />
+  
+  <!-- 基本信息 -->
+  <view class="info-section">
+    <view class="title">{{event.title}}</view>
+    <view class="meta">
+      <image src="/assets/icon-time.png" class="icon" />
+      <text>{{event.date}} {{event.time}}</text>
+    </view>
+    <view class="meta">
+      <image src="/assets/icon-location.png" class="icon" />
+      <text>{{event.venue}}</text>
+    </view>
+    <view class="price-range">
+      <text>¥{{event.minPrice}}</text>
+      <text wx:if="{{event.maxPrice > event.minPrice}}">- ¥{{event.maxPrice}}</text>
+    </view>
+  </view>
+
+  <!-- 场次选择 -->
+  <view class="section">
+    <view class="section-title">选择场次</view>
+    <scroll-view scroll-x class="session-scroll">
+      <view 
+        wx:for="{{event.sessions}}"
+        wx:key="id"
+        class="session-item {{activeSession === item.id ? 'active' : ''}}"
+        bindtap="handleSessionTap"
+        data-id="{{item.id}}"
+      >
+        <view>{{item.date}}</view>
+        <view>{{item.time}}</view>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 演出详情（长图） -->
+  <view class="section">
+    <view class="section-title">演出详情</view>
+    <image 
+      src="{{event.detailImage}}" 
+      mode="widthFix" 
+      class="detail-image"
+      binderror="handleImageError"
+    />
+  </view>
+
+  <!-- 底部购票按钮 -->
+  <view class="footer">
+    <button class="buy-btn" bindtap="handleBuyClick">立即购票</button>
+  </view>
+</view>

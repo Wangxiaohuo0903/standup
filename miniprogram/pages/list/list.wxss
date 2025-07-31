@@ -1,0 +1,46 @@
+.filter-bar {
+    display: flex;
+    padding: 20rpx 30rpx;
+    background: white;
+    border-bottom: 1rpx solid #eee;
+  }
+  
+  .filter-item {
+    display: flex;
+    align-items: center;
+    margin-right: 40rpx;
+    font-size: 28rpx;
+  }
+  
+  .filter-icon {
+    width: 24rpx;
+    height: 24rpx;
+    margin-left: 10rpx;
+  }
+  
+  .event-container {
+    height: calc(100vh - 100rpx);
+    padding: 30rpx;
+  }
+  
+  .loading {
+    text-align: center;
+    padding: 30rpx;
+    color: #999;
+    font-size: 28rpx;
+  }
+  .no-data-img {
+    width: 200rpx;
+    height: 200rpx;
+    margin-bottom: 30rpx;
+  }
+  
+  .no-more {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 50rpx 0;
+    color: #999;
+    font-size: 28rpx;
+  }

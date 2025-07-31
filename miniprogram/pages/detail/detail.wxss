@@ -1,0 +1,89 @@
+.detail-container {
+    padding-bottom: 120rpx;
+  }
+  
+  .poster {
+    width: 100%;
+  }
+  
+  .info-section {
+    padding: 30rpx;
+  }
+  
+  .title {
+    font-size: 40rpx;
+    font-weight: bold;
+    margin-bottom: 20rpx;
+  }
+  
+  .meta {
+    display: flex;
+    align-items: center;
+    font-size: 28rpx;
+    color: #666;
+    margin-bottom: 15rpx;
+  }
+  
+  .icon {
+    width: 30rpx;
+    height: 30rpx;
+    margin-right: 10rpx;
+  }
+  
+  .price-range {
+    color: #ff6633;
+    font-size: 36rpx;
+    font-weight: bold;
+    margin-top: 20rpx;
+  }
+  
+  .section {
+    margin: 30rpx 0;
+    padding: 0 30rpx;
+  }
+  
+  .section-title {
+    font-size: 32rpx;
+    font-weight: bold;
+    margin-bottom: 20rpx;
+  }
+  
+  .session-scroll {
+    white-space: nowrap;
+  }
+  
+  .session-item {
+    display: inline-block;
+    padding: 20rpx 30rpx;
+    margin-right: 20rpx;
+    border: 1rpx solid #eee;
+    border-radius: 8rpx;
+    text-align: center;
+  }
+  
+  .session-item.active {
+    border-color: #ff6633;
+    background: #fff0e6;
+  }
+  
+  .detail-image {
+    width: 100%;
+    border-radius: 8rpx;
+  }
+  
+  .footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: white;
+    padding: 20rpx 30rpx;
+    box-shadow: 0 -2rpx 10rpx rgba(0,0,0,0.1);
+  }
+  
+  .buy-btn {
+    background: #ff6633;
+    color: white;
+    border-radius: 50rpx;
+    font-size: 32rpx;
+  }

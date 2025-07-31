@@ -1,0 +1,66 @@
+<view class="order-container">
+  <!-- 演出信息 -->
+  <view class="event-info">
+    <image src="{{event.poster}}" class="poster" />
+    <view class="info">
+      <view class="title">{{event.title}}</view>
+      <view class="session">{{selectedSession.date}} {{selectedSession.time}}</view>
+      <view class="venue">{{event.venue}}</view>
+    </view>
+  </view>
+
+  <!-- 票档选择 -->
+  <view class="section">
+    <view class="section-title">选择票档</view>
+    <radio-group bindchange="handleTicketTypeChange">
+      <view 
+        wx:for="{{ticketTypes}}" 
+        wx:key="id" 
+        class="ticket-type {{ticketType === item.id ? 'active' : ''}}"
+      >
+        <label>
+          <radio value="{{item.id}}" checked="{{ticketType === item.id}}" />
+          <view class="ticket-info">
+            <view class="name">{{item.name}}</view>
+            <view class="price">¥{{item.price}}</view>
+            <view class="stock">剩余 {{item.stock}} 张</view>
+          </view>
+        </label>
+      </view>
+    </radio-group>
+  </view>
+
+  <!-- 购买数量 -->
+  <view class="section">
+    <view class="section-title">购买数量</view>
+    <view class="quantity-selector">
+      <button 
+        class="btn-minus" 
+        bindtap="handleDecrease"
+        disabled="{{quantity <= 1}}"
+      >-</button>
+      <input 
+        type="number" 
+        value="{{quantity}}" 
+        disabled
+        class="quantity-input"
+      />
+      <button 
+        class="btn-plus" 
+        bindtap="handleIncrease"
+        disabled="{{quantity >= maxQuantity}}"
+      >+</button>
+    </view>
+  </view>
+
+  <!-- 订单金额 -->
+  <view class="price-section">
+    <view>合计：</view>
+    <view class="total-price">¥{{totalPrice}}</view>
+  </view>
+
+  <!-- 底部按钮 -->
+  <view class="footer">
+    <button class="submit-btn" bindtap="handleSubmit">提交订单</button>
+  </view>
+</view>

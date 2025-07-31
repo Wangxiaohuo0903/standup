@@ -1,0 +1,41 @@
+<!-- 筛选条件 -->
+<view class="filter-bar">
+  <picker 
+    range="{{dateOptions}}" 
+    value="{{dateIndex}}" 
+    bindchange="handleDateChange"
+    class="filter-item"
+  >
+    <text>{{dateOptions[dateIndex]}}</text>
+    <image src="/assets/arrow-down.png" class="filter-icon" />
+  </picker>
+  
+  <picker 
+    range="{{typeOptions}}" 
+    value="{{typeIndex}}" 
+    bindchange="handleTypeChange"
+    class="filter-item"
+  >
+    <text>{{typeOptions[typeIndex]}}</text>
+    <image src="/assets/arrow-down.png" class="filter-icon" />
+  </picker>
+</view>
+
+<!-- 演出列表 -->
+<scroll-view 
+  scroll-y 
+  class="event-container"
+  bindscrolltolower="loadMore"
+  lower-threshold="100"
+>
+  <block wx:for="{{filteredList}}" wx:key="id">
+    <event-card event="{{item}}" />
+  </block>
+  
+  <view wx:if="{{isLoading}}" class="loading">加载中...</view>
+  <view wx:if="{{noMoreData && filteredList.length === 0}}" class="no-more">
+    <image src="/assets/no-data.png" mode="aspectFit" class="no-data-img" />
+    <view>没有找到符合条件的演出</view>
+  </view>
+  <view wx:if="{{noMoreData && filteredList.length > 0}}" class="no-more">没有更多了</view>
+</scroll-view>
