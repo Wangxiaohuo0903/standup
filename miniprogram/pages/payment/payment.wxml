@@ -1,0 +1,39 @@
+<view class="payment-container">
+  <view class="payment-info">
+    <view class="amount">¥{{orderInfo.totalPrice}}</view>
+    <view class="desc">请尽快完成支付，剩余时间</view>
+    <view class="countdown">{{countdown}}</view>
+  </view>
+
+  <view class="section">
+    <view class="section-title">选择支付方式</view>
+    <radio-group bindchange="handlePaymentChange">
+      <label class="payment-item">
+        <radio value="wechat" checked="{{paymentType === 'wechat'}}" color="#07C160" />
+        <image src="/assets/wechat-pay.png" class="payment-icon" />
+        <text>微信支付</text>
+      </label>
+      <label class="payment-item">
+        <radio value="alipay" checked="{{paymentType === 'alipay'}}" color="#07C160" />
+        <image src="/assets/alipay.png" class="payment-icon" />
+        <text>支付宝</text>
+      </label>
+    </radio-group>
+  </view>
+
+  <view class="agreement">
+    <checkbox-group bindchange="handleAgreeChange">
+      <label>
+        <checkbox value="agree" checked="{{agree}}" color="#07C160" />
+        <text>我已阅读并同意</text>
+      </label>
+    </checkbox-group>
+    <text class="link">《用户服务协议》</text>
+  </view>
+
+  <button 
+    class="pay-btn" 
+    bindtap="handlePay"
+    disabled="{{!agree}}"
+  >确认支付 ¥{{orderInfo.totalPrice}}</button>
+</view>

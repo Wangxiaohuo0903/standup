@@ -1,6 +1,7 @@
 {
-    "usingComponents": {
-      "event-card": "/components/event-card/event-card"
-    }
+    "usingComponents": {  
+        "event-card": "/components/event-card/event-card"
+    },
+    "navigationBarTitleText": "推荐演出",
+    "enablePullDownRefresh": false
   }
-  

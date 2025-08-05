@@ -3,10 +3,37 @@
     "pages/home/home",
     "pages/list/list",
     "pages/detail/detail",
-    "pages/order/order"
+    "pages/order/order",
+    "pages/calendar/calendar",
+    "pages/user/user",
+    "pages/order/list",
+    "pages/payment/payment"
   ],
-  "usingComponents": {
-    "event-card": "/components/event-card/event-card"
+  "tabBar": {
+    "color": "#999",
+    "selectedColor": "#ff6633",
+    "backgroundColor": "#fff",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/home/home",
+        "text": "推荐演出",
+        "iconPath": "assets/tab/home.png",
+        "selectedIconPath": "assets/tab/home-active.png"
+      },
+      {
+        "pagePath": "pages/calendar/calendar",
+        "text": "演出日历",
+        "iconPath": "assets/tab/calendar.png",
+        "selectedIconPath": "assets/tab/calendar-active.png"
+      },
+      {
+        "pagePath": "pages/user/user",
+        "text": "我的",
+        "iconPath": "assets/tab/user.png",
+        "selectedIconPath": "assets/tab/user-active.png"
+      }
+    ]
   },
   "window": {
     "navigationBarTitleText": "脱口秀票务",

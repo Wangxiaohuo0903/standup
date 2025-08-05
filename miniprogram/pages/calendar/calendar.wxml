@@ -1,0 +1,37 @@
+<view class="calendar-container">
+  <!-- 日历头部：年月和切换按钮 -->
+  <view class="calendar-header">
+    <view class="nav-btn" bindtap="handlePrevMonth">❮</view>
+    <view class="current-date">{{currentYear}}年{{currentMonth}}月</view>
+    <view class="nav-btn" bindtap="handleNextMonth">❯</view>
+  </view>
+  
+  <!-- 星期标题 -->
+  <view class="week-header">
+    <view wx:for="{{weekDays}}" wx:key="index" class="week-day">{{item}}</view>
+  </view>
+  
+  <!-- 日历主体：使用swiper实现左右滑动 -->
+  <swiper 
+    current="{{currentSwiperIndex}}" 
+    duration="300" 
+    bindchange="handleSwiperChange"
+  >
+    <block wx:for="{{[0,1,2]}}" wx:key="index">
+      <swiper-item>
+        <view class="calendar-grid">
+          <block wx:for="{{calendarData[index].days}}" wx:key="date">
+            <view 
+              class="day-cell {{item.isToday ? 'today' : ''}} {{item.hasShow ? 'has-show' : ''}} {{item.isCurrentMonth ? '' : 'other-month'}}"
+              bindtap="handleDayTap"
+              data-date="{{item.date}}"
+            >
+              <view class="day-number">{{item.day}}</view>
+              <view wx:if="{{item.hasShow}}" class="show-dot"></view>
+            </view>
+          </block>
+        </view>
+      </swiper-item>
+    </block>
+  </swiper>
+</view>

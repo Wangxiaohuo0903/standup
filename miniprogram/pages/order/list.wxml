@@ -1,0 +1,68 @@
+<view class="order-list-container">
+  <!-- 订单状态筛选 -->
+  <scroll-view scroll-x class="order-filter">
+    <view 
+      wx:for="{{orderStatus}}"
+      wx:key="id"
+      class="filter-item {{currentStatus === item.id ? 'active' : ''}}"
+      bindtap="changeStatus"
+      data-id="{{item.id}}"
+    >
+      {{item.name}}
+    </view>
+  </scroll-view>
+  
+  <!-- 订单列表 -->
+  <scroll-view scroll-y class="order-list">
+    <block wx:for="{{orders}}" wx:key="id">
+      <view class="order-item">
+        <view class="order-header">
+          <text class="order-number">订单号: {{item.orderNo}}</text>
+          <text class="order-status">{{item.statusText}}</text>
+        </view>
+        
+        <navigator url="/pages/detail/detail?id={{item.eventId}}" class="order-content">
+          <image src="{{item.poster}}" class="event-poster" />
+          <view class="order-info">
+            <view class="event-title">{{item.eventName}}</view>
+            <view class="event-time">{{item.date}} {{item.time}}</view>
+            <view class="ticket-info">
+              <text>{{item.ticketType}} × {{item.quantity}}</text>
+              <text class="price">¥{{item.totalPrice}}</text>
+            </view>
+          </view>
+        </navigator>
+        
+        <view class="order-footer">
+          <text class="order-time">下单时间: {{item.createTime}}</text>
+          <view class="order-actions">
+            <button 
+              wx:if="{{item.status === 1}}"
+              class="action-btn cancel"
+              bindtap="cancelOrder"
+              data-id="{{item.id}}"
+            >取消订单</button>
+            <button 
+              wx:if="{{item.status === 1}}"
+              class="action-btn pay"
+              bindtap="payOrder"
+              data-id="{{item.id}}"
+            >立即支付</button>
+            <button 
+              wx:if="{{item.status === 2 || item.status === 3}}"
+              class="action-btn"
+              bindtap="viewTicket"
+              data-id="{{item.id}}"
+            >查看票券</button>
+          </view>
+        </view>
+      </view>
+    </block>
+    
+    <view wx:if="{{orders.length === 0}}" class="empty-order">
+      <image src="/assets/empty-order.png" class="empty-img" />
+      <text class="empty-text">暂无订单</text>
+      <button class="find-shows" bindtap="goHome">去逛逛</button>
+    </view>
+  </scroll-view>
+</view>

@@ -14,6 +14,12 @@ Page({
     },
   
     onLoad: function(options) {
+        if (options.date) {
+            this.setData({
+              selectedDate: options.date,
+              dateIndex: 0 // 重置日期筛选
+            });
+          }
       this.setData({
         category: options.category || ''
       }, () => {
@@ -48,6 +54,7 @@ Page({
         
         this.setData({
           eventList: newList,
+          date: this.data.selectedDate,
           noMoreData: mockData.length < this.data.pageSize,
           isLoading: false
         }, () => {

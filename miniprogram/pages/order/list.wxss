@@ -1,0 +1,171 @@
+.order-list-container {
+    background-color: #f5f5f5;
+    min-height: 100vh;
+  }
+  
+  .order-filter {
+    background: white;
+    white-space: nowrap;
+    padding: 20rpx 0;
+    border-bottom: 1rpx solid #eee;
+  }
+  
+  .filter-item {
+    display: inline-block;
+    padding: 10rpx 40rpx;
+    font-size: 28rpx;
+    color: #666;
+  }
+  
+  .filter-item.active {
+    color: #ff6633;
+    position: relative;
+  }
+  
+  .filter-item.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60rpx;
+    height: 6rpx;
+    background-color: #ff6633;
+    border-radius: 3rpx;
+  }
+  
+  .order-list {
+    height: calc(100vh - 100rpx);
+    padding: 20rpx;
+    box-sizing: border-box;
+  }
+  
+  .order-item {
+    background: white;
+    border-radius: 16rpx;
+    margin-bottom: 20rpx;
+    overflow: hidden;
+  }
+  
+  .order-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 20rpx 30rpx;
+    border-bottom: 1rpx solid #f5f5f5;
+  }
+  
+  .order-number {
+    font-size: 26rpx;
+    color: #666;
+  }
+  
+  .order-status {
+    font-size: 26rpx;
+    color: #ff6633;
+    font-weight: bold;
+  }
+  
+  .order-content {
+    display: flex;
+    padding: 30rpx;
+  }
+  
+  .event-poster {
+    width: 180rpx;
+    height: 240rpx;
+    border-radius: 8rpx;
+    margin-right: 30rpx;
+  }
+  
+  .order-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .event-title {
+    font-size: 32rpx;
+    font-weight: bold;
+    margin-bottom: 15rpx;
+  }
+  
+  .event-time {
+    font-size: 26rpx;
+    color: #666;
+    margin-bottom: 20rpx;
+  }
+  
+  .ticket-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 28rpx;
+    margin-top: auto;
+  }
+  
+  .price {
+    color: #ff6633;
+    font-weight: bold;
+  }
+  
+  .order-footer {
+    padding: 20rpx 30rpx;
+    border-top: 1rpx solid #f5f5f5;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .order-time {
+    font-size: 26rpx;
+    color: #999;
+    margin-bottom: 20rpx;
+  }
+  
+  .order-actions {
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  .action-btn {
+    font-size: 26rpx;
+    padding: 8rpx 25rpx;
+    border-radius: 30rpx;
+    margin-left: 20rpx;
+    border: 1rpx solid #ddd;
+    background: white;
+  }
+  
+  .action-btn.pay {
+    background: #ff6633;
+    color: white;
+    border: none;
+  }
+  
+  .action-btn.cancel {
+    color: #666;
+  }
+  
+  .empty-order {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 100rpx 0;
+  }
+  
+  .empty-img {
+    width: 300rpx;
+    height: 300rpx;
+    margin-bottom: 40rpx;
+  }
+  
+  .empty-text {
+    font-size: 32rpx;
+    color: #999;
+    margin-bottom: 50rpx;
+  }
+  
+  .find-shows {
+    background: #ff6633;
+    color: white;
+    border-radius: 50rpx;
+    padding: 0 80rpx;
+  }
