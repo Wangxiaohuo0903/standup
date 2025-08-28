@@ -1,9 +1,9 @@
 <view class="calendar-container">
   <!-- 日历头部：年月和切换按钮 -->
   <view class="calendar-header">
-    <view class="nav-btn" bindtap="handlePrevMonth">❮</view>
+    <view class="nav-btn" bindtap="handlePrevMonth" style="color: {{theme.colors.primary}}">❮</view>
     <view class="current-date">{{currentYear}}年{{currentMonth}}月</view>
-    <view class="nav-btn" bindtap="handleNextMonth">❯</view>
+    <view class="nav-btn" bindtap="handleNextMonth" style="color: {{theme.colors.primary}}">❯</view>
   </view>
   
   <!-- 星期标题 -->
@@ -11,27 +11,70 @@
     <view wx:for="{{weekDays}}" wx:key="index" class="week-day">{{item}}</view>
   </view>
   
+  <!-- 加载状态 -->
+  <view wx:if="{{loading}}" class="loading">
+    <text>加载中...</text>
+  </view>
+  
   <!-- 日历主体：使用swiper实现左右滑动 -->
   <swiper 
     current="{{currentSwiperIndex}}" 
     duration="300" 
     bindchange="handleSwiperChange"
+    class="calendar-swiper"
   >
     <block wx:for="{{[0,1,2]}}" wx:key="index">
       <swiper-item>
         <view class="calendar-grid">
           <block wx:for="{{calendarData[index].days}}" wx:key="date">
             <view 
-              class="day-cell {{item.isToday ? 'today' : ''}} {{item.hasShow ? 'has-show' : ''}} {{item.isCurrentMonth ? '' : 'other-month'}}"
+              class="day-cell {{item.isToday ? 'today' : ''}} {{item.hasShow ? 'has-show' : ''}} {{item.isCurrentMonth ? '' : 'other-month'}} {{selectedDate === item.date ? 'selected' : ''}}"
               bindtap="handleDayTap"
               data-date="{{item.date}}"
+              style="{{selectedDate === item.date ? 'background-color: ' + theme.colors.primary + ';' : (item.hasShow ? 'background-color: ' + theme.colors.primary + '20;' : '')}}"
             >
-              <view class="day-number">{{item.day}}</view>
-              <view wx:if="{{item.hasShow}}" class="show-dot"></view>
+              <view class="day-number" style="{{selectedDate === item.date ? 'color: #fff;' : (item.isToday ? 'color: ' + theme.colors.primary + ';' : '')}}">{{item.day}}</view>
+              <view wx:if="{{item.hasShow}}" class="show-dot" style="{{selectedDate === item.date ? 'background-color: #fff;' : 'background-color: ' + theme.colors.primary + ';'}}">
+                <text wx:if="{{item.eventsCount > 1}}" class="event-count">{{item.eventsCount}}</text>
+              </view>
             </view>
           </block>
         </view>
       </swiper-item>
     </block>
   </swiper>
+  
+  <!-- 选中日期的演出列表 -->
+  <view wx:if="{{selectedEvents.length > 0}}" class="events-section">
+    <view class="events-header">
+      <text class="events-date">{{selectedDate}}的演出</text>
+      <view class="view-all-btn" bindtap="handleViewAllEvents" style="color: {{theme.colors.primary}}; border-color: {{theme.colors.primary}};">查看全部</view>
+    </view>
+    
+    <scroll-view class="events-list" scroll-y>
+      <block wx:for="{{selectedEvents}}" wx:key="id">
+        <view class="event-item" bindtap="handleEventTap" data-id="{{item.id}}">
+          <image class="event-poster" src="{{item.poster}}" mode="aspectFill" />
+          <view class="event-info">
+            <view class="event-title">{{item.title}}</view>
+            <view class="event-details">
+              <text class="event-time">{{item.time}}</text>
+              <text class="event-venue">{{item.venue}}</text>
+            </view>
+            <view class="event-price" style="color: {{theme.colors.primary}};">¥{{item.priceFrom}}起</view>
+          </view>
+          <view class="event-status {{item.status}}">
+            <text wx:if="{{item.status === 'onSale'}}">在售</text>
+            <text wx:if="{{item.status === 'upcoming'}}">即将开售</text>
+            <text wx:if="{{item.status === 'soldOut'}}">售罄</text>
+          </view>
+        </view>
+      </block>
+    </scroll-view>
+  </view>
+  
+  <!-- 空状态提示 -->
+  <view wx:if="{{selectedDate && selectedEvents.length === 0}}" class="empty-state">
+    <text>该日期暂无演出安排</text>
+  </view>
 </view>

@@ -40,3 +40,67 @@ export async function getHome(): Promise<HomePayload> {
     ]
   });
 }
+
+export type CalendarEvent = {
+  id: string;
+  title: string;
+  poster: string;
+  city: string;
+  venue: string;
+  date: string; // YYYY-MM-DD format
+  time: string;
+  priceFrom: number;
+  status: "onSale" | "upcoming" | "soldOut";
+};
+
+export type CalendarPayload = {
+  [date: string]: CalendarEvent[]; // date as key, events array as value
+};
+
+export async function getCalendarEvents(year: number, month: number): Promise<CalendarPayload> {
+  // 真实接口：return request<CalendarPayload>(`/calendar/${year}/${month}`);
+  // mock：生成当月的演出数据
+  const events: CalendarPayload = {};
+  
+  // 生成一些模拟数据
+  const mockEvents = [
+    { id: "c1", title: "周五秀·DT深夜场", poster: "https://picsum.photos/400/260?c1", city: "北京", venue: "DownTown", time: "22:00", priceFrom: 88, status: "onSale" as const },
+    { id: "c2", title: "拿大顶剧社#040", poster: "https://picsum.photos/400/260?c2", city: "北京", venue: "DownTown", time: "19:30", priceFrom: 150, status: "upcoming" as const },
+    { id: "c3", title: "主打秀·彩虹厂", poster: "https://picsum.photos/400/260?c3", city: "深圳", venue: "彩虹厂", time: "20:00", priceFrom: 199, status: "onSale" as const },
+    { id: "c4", title: "城市巡演·北京站", poster: "https://picsum.photos/400/260?c4", city: "北京", venue: "剧场A", time: "19:30", priceFrom: 299, status: "upcoming" as const },
+    { id: "c5", title: "即兴喜剧之夜", poster: "https://picsum.photos/400/260?c5", city: "上海", venue: "笑果工厂", time: "21:00", priceFrom: 120, status: "onSale" as const },
+    { id: "c6", title: "脱口秀新人专场", poster: "https://picsum.photos/400/260?c6", city: "广州", venue: "TT脱口秀", time: "20:30", priceFrom: 68, status: "onSale" as const }
+  ];
+  
+  // 随机分配到这个月的不同日期
+  const daysInMonth = new Date(year, month, 0).getDate();
+  const today = new Date();
+  
+  for (let day = 1; day <= daysInMonth; day++) {
+    const date = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+    const eventDate = new Date(year, month - 1, day);
+    
+    // 只为今天及未来的日期生成演出数据
+    if (eventDate >= new Date(today.getFullYear(), today.getMonth(), today.getDate())) {
+      // 30% 的概率有演出
+      if (Math.random() < 0.3) {
+        // 随机选择1-2个演出
+        const eventCount = Math.random() < 0.7 ? 1 : 2;
+        const selectedEvents = [];
+        
+        for (let i = 0; i < eventCount; i++) {
+          const randomEvent = mockEvents[Math.floor(Math.random() * mockEvents.length)];
+          selectedEvents.push({
+            ...randomEvent,
+            id: `${randomEvent.id}_${date}_${i}`,
+            date: date
+          });
+        }
+        
+        events[date] = selectedEvents;
+      }
+    }
+  }
+  
+  return Promise.resolve(events);
+}

@@ -1,3 +1,6 @@
+const { getCalendarEvents } = require('../../api/index');
+const { theme, copy } = require('../../utils/tenant');
+
 Page({
     data: {
       weekDays: ['日', '一', '二', '三', '四', '五', '六'],
@@ -9,16 +12,12 @@ Page({
         { year: 0, month: 0, days: [] }, // 当前月
         { year: 0, month: 0, days: [] }  // 下个月
       ],
-      // 模拟有演出的日期数据（实际应从后端获取）
-      showDates: [
-        '2023-10-15', '2023-10-18', '2023-10-20', 
-        '2023-10-22', '2023-10-25', '2023-10-28',
-        '2023-11-02', '2023-11-05', '2023-11-08',
-        '2023-11-12', '2023-11-15', '2023-11-18',
-        '2023-11-20', '2023-11-25', '2023-11-28',
-        '2023-12-01', '2023-12-05', '2023-12-10',
-        '2023-12-15', '2023-12-20', '2023-12-25'
-      ]
+      eventsData: {}, // 存储所有演出数据
+      selectedDate: '', // 选中的日期
+      selectedEvents: [], // 选中日期的演出列表
+      loading: false,
+      theme, // 租户主题配置
+      copy // 租户文案配置
     },
   
     onLoad: function() {
@@ -36,8 +35,42 @@ Page({
         currentYear,
         currentMonth
       }, () => {
-        this.generateCalendarData();
+        this.loadCalendarData();
       });
+    },
+
+    // 加载日历数据
+    async loadCalendarData() {
+      this.setData({ loading: true });
+      
+      try {
+        const { currentYear, currentMonth } = this.data;
+        const prevMonth = this.getPrevMonth(currentYear, currentMonth);
+        const nextMonth = this.getNextMonth(currentYear, currentMonth);
+        
+        // 并行加载三个月的演出数据
+        const [prevEvents, currentEvents, nextEvents] = await Promise.all([
+          getCalendarEvents(prevMonth.year, prevMonth.month),
+          getCalendarEvents(currentYear, currentMonth), 
+          getCalendarEvents(nextMonth.year, nextMonth.month)
+        ]);
+        
+        // 合并所有演出数据
+        const allEvents = { ...prevEvents, ...currentEvents, ...nextEvents };
+        
+        this.setData({
+          eventsData: allEvents
+        }, () => {
+          this.generateCalendarData();
+        });
+        
+      } catch (error) {
+        console.error('加载日历数据失败:', error);
+        wx.showToast({ title: '加载失败', icon: 'none' });
+        this.generateCalendarData(); // 即使失败也生成基础日历
+      } finally {
+        this.setData({ loading: false });
+      }
     },
   
     // 生成三个月的日历数据
@@ -67,7 +100,7 @@ Page({
       
       const days = [];
       const today = new Date();
-      const todayStr = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
+      const todayStr = `${today.getFullYear()}-${(today.getMonth() + 1).toString().padStart(2, '0')}-${today.getDate().toString().padStart(2, '0')}`;
       
       // 添加上个月的日期
       const prevMonthDays = firstDay;
@@ -76,25 +109,31 @@ Page({
       
       for (let i = 0; i < prevMonthDays; i++) {
         const day = daysInPrevMonth - prevMonthDays + i + 1;
-        const date = `${prevMonth.year}-${prevMonth.month}-${day}`;
+        const date = `${prevMonth.year}-${prevMonth.month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+        const hasEvents = this.data.eventsData[date] && this.data.eventsData[date].length > 0;
+        
         days.push({
           day: day,
           date: date,
           isCurrentMonth: false,
-          hasShow: this.data.showDates.includes(date),
-          isToday: false
+          hasShow: hasEvents,
+          isToday: false,
+          eventsCount: hasEvents ? this.data.eventsData[date].length : 0
         });
       }
       
       // 添加本月的日期
       for (let i = 1; i <= daysInMonth; i++) {
-        const date = `${year}-${month}-${i}`;
+        const date = `${year}-${month.toString().padStart(2, '0')}-${i.toString().padStart(2, '0')}`;
+        const hasEvents = this.data.eventsData[date] && this.data.eventsData[date].length > 0;
+        
         days.push({
           day: i,
           date: date,
           isCurrentMonth: true,
-          hasShow: this.data.showDates.includes(date),
-          isToday: date === todayStr
+          hasShow: hasEvents,
+          isToday: date === todayStr,
+          eventsCount: hasEvents ? this.data.eventsData[date].length : 0
         });
       }
       
@@ -103,13 +142,16 @@ Page({
       const nextMonth = this.getNextMonth(year, month);
       
       for (let i = 1; i <= nextMonthDays; i++) {
-        const date = `${nextMonth.year}-${nextMonth.month}-${i}`;
+        const date = `${nextMonth.year}-${nextMonth.month.toString().padStart(2, '0')}-${i.toString().padStart(2, '0')}`;
+        const hasEvents = this.data.eventsData[date] && this.data.eventsData[date].length > 0;
+        
         days.push({
           day: i,
           date: date,
           isCurrentMonth: false,
-          hasShow: this.data.showDates.includes(date),
-          isToday: false
+          hasShow: hasEvents,
+          isToday: false,
+          eventsCount: hasEvents ? this.data.eventsData[date].length : 0
         });
       }
       
@@ -149,9 +191,11 @@ Page({
         this.setData({
           currentYear: prevMonth.year,
           currentMonth: prevMonth.month,
-          currentSwiperIndex: 1
+          currentSwiperIndex: 1,
+          selectedDate: '',
+          selectedEvents: []
         }, () => {
-          this.generateCalendarData();
+          this.loadCalendarData();
         });
       } else if (current === 2) {
         // 向右滑动：显示下个月
@@ -159,9 +203,11 @@ Page({
         this.setData({
           currentYear: nextMonth.year,
           currentMonth: nextMonth.month,
-          currentSwiperIndex: 1
+          currentSwiperIndex: 1,
+          selectedDate: '',
+          selectedEvents: []
         }, () => {
-          this.generateCalendarData();
+          this.loadCalendarData();
         });
       }
     },
@@ -171,9 +217,11 @@ Page({
       const prevMonth = this.getPrevMonth(this.data.currentYear, this.data.currentMonth);
       this.setData({
         currentYear: prevMonth.year,
-        currentMonth: prevMonth.month
+        currentMonth: prevMonth.month,
+        selectedDate: '',
+        selectedEvents: []
       }, () => {
-        this.generateCalendarData();
+        this.loadCalendarData();
       });
     },
   
@@ -182,21 +230,62 @@ Page({
       const nextMonth = this.getNextMonth(this.data.currentYear, this.data.currentMonth);
       this.setData({
         currentYear: nextMonth.year,
-        currentMonth: nextMonth.month
+        currentMonth: nextMonth.month,
+        selectedDate: '',
+        selectedEvents: []
       }, () => {
-        this.generateCalendarData();
+        this.loadCalendarData();
       });
     },
   
     // 处理日期点击
     handleDayTap: function(e) {
       const date = e.currentTarget.dataset.date;
-      const parts = date.split('-');
-      const formattedDate = `${parts[0]}年${parts[1]}月${parts[2]}日`;
+      const eventsForDate = this.data.eventsData[date] || [];
       
-      // 跳转到当日演出列表页
-      wx.navigateTo({
-        url: `/pages/list/list?date=${date}&title=${encodeURIComponent(formattedDate)}`
+      // 更新选中状态
+      this.setData({
+        selectedDate: date,
+        selectedEvents: eventsForDate
       });
+      
+      // 如果该日期有演出，显示在日历下方；否则可选择跳转到列表页
+      if (eventsForDate.length === 0) {
+        const parts = date.split('-');
+        const formattedDate = `${parts[0]}年${parseInt(parts[1])}月${parseInt(parts[2])}日`;
+        
+        wx.showModal({
+          title: '提示',
+          content: `${formattedDate}暂无演出，是否查看所有演出？`,
+          success: (res) => {
+            if (res.confirm) {
+              wx.navigateTo({
+                url: `/pages/list/list`
+              });
+            }
+          }
+        });
+      }
+    },
+
+    // 点击演出卡片跳转到详情
+    handleEventTap: function(e) {
+      const eventId = e.currentTarget.dataset.id;
+      wx.navigateTo({
+        url: `/pages/detail/detail?id=${eventId}`
+      });
+    },
+
+    // 查看当日所有演出
+    handleViewAllEvents: function() {
+      const { selectedDate } = this.data;
+      if (selectedDate) {
+        const parts = selectedDate.split('-');
+        const formattedDate = `${parts[0]}年${parseInt(parts[1])}月${parseInt(parts[2])}日`;
+        
+        wx.navigateTo({
+          url: `/pages/list/list?date=${selectedDate}&title=${encodeURIComponent(formattedDate)}`
+        });
+      }
     }
   });
