@@ -1,89 +1,445 @@
+.container {
+  min-height: 100vh;
+  background-color: #f8f8f8;
+  padding-bottom: 120rpx;
+}
+
+.loading-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  font-size: 32rpx;
+  color: #999;
+}
+
 .detail-container {
-    padding-bottom: 120rpx;
-  }
-  
-  .poster {
-    width: 100%;
-  }
-  
-  .info-section {
-    padding: 30rpx;
-  }
-  
-  .title {
-    font-size: 40rpx;
-    font-weight: bold;
-    margin-bottom: 20rpx;
-  }
-  
-  .meta {
-    display: flex;
-    align-items: center;
-    font-size: 28rpx;
-    color: #666;
-    margin-bottom: 15rpx;
-  }
-  
-  .icon {
-    width: 30rpx;
-    height: 30rpx;
-    margin-right: 10rpx;
-  }
-  
-  .price-range {
-    color: #ff6633;
-    font-size: 36rpx;
-    font-weight: bold;
-    margin-top: 20rpx;
-  }
-  
-  .section {
-    margin: 30rpx 0;
-    padding: 0 30rpx;
-  }
-  
-  .section-title {
-    font-size: 32rpx;
-    font-weight: bold;
-    margin-bottom: 20rpx;
-  }
-  
-  .session-scroll {
-    white-space: nowrap;
-  }
-  
-  .session-item {
-    display: inline-block;
-    padding: 20rpx 30rpx;
-    margin-right: 20rpx;
-    border: 1rpx solid #eee;
-    border-radius: 8rpx;
-    text-align: center;
-  }
-  
-  .session-item.active {
-    border-color: #ff6633;
-    background: #fff0e6;
-  }
-  
-  .detail-image {
-    width: 100%;
-    border-radius: 8rpx;
-  }
-  
-  .footer {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: white;
-    padding: 20rpx 30rpx;
-    box-shadow: 0 -2rpx 10rpx rgba(0,0,0,0.1);
-  }
-  
-  .buy-btn {
-    background: #ff6633;
-    color: white;
-    border-radius: 50rpx;
-    font-size: 32rpx;
-  }
+  background-color: #fff;
+}
+
+/* 海报区域 */
+.poster-section {
+  position: relative;
+  height: 500rpx;
+  overflow: hidden;
+}
+
+.poster-image {
+  width: 100%;
+  height: 100%;
+}
+
+.poster-overlay {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.3) 100%);
+}
+
+.status-tag {
+  position: absolute;
+  top: 30rpx;
+  right: 30rpx;
+  padding: 10rpx 20rpx;
+  border-radius: 20rpx;
+  font-size: 24rpx;
+  font-weight: bold;
+}
+
+.status-tag.onSale {
+  background-color: rgba(82, 196, 26, 0.9);
+  color: #fff;
+}
+
+.status-tag.upcoming {
+  background-color: rgba(250, 140, 22, 0.9);
+  color: #fff;
+}
+
+.status-tag.soldOut {
+  background-color: rgba(0, 0, 0, 0.6);
+  color: #fff;
+}
+
+/* 基本信息 */
+.info-section {
+  padding: 40rpx 30rpx;
+  border-bottom: 20rpx solid #f8f8f8;
+}
+
+.title {
+  font-size: 40rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20rpx;
+  line-height: 1.4;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 30rpx;
+}
+
+.tag {
+  background-color: #f0f0f0;
+  color: #666;
+  font-size: 24rpx;
+  padding: 6rpx 16rpx;
+  border-radius: 12rpx;
+  margin-right: 16rpx;
+  margin-bottom: 12rpx;
+}
+
+.meta-info {
+  margin-bottom: 20rpx;
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20rpx;
+  font-size: 28rpx;
+}
+
+.meta-label {
+  color: #666;
+  width: 120rpx;
+  flex-shrink: 0;
+}
+
+.meta-value {
+  color: #333;
+  flex: 1;
+}
+
+.seat-info {
+  text-align: center;
+  padding: 20rpx;
+  background-color: #f8f8f8;
+  border-radius: 12rpx;
+}
+
+.remaining-seats {
+  font-size: 28rpx;
+  color: #666;
+}
+
+/* 演出介绍 */
+.description-section {
+  padding: 40rpx 30rpx;
+  border-bottom: 20rpx solid #f8f8f8;
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20rpx;
+}
+
+.description-text {
+  font-size: 28rpx;
+  color: #666;
+  line-height: 1.6;
+}
+
+/* 价格选择 */
+.price-section {
+  padding: 40rpx 30rpx;
+  border-bottom: 20rpx solid #f8f8f8;
+}
+
+.price-list {
+  margin-top: 20rpx;
+}
+
+.price-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+  background-color: #f8f8f8;
+  border-radius: 16rpx;
+  border: 2rpx solid transparent;
+  transition: all 0.3s ease;
+}
+
+.price-option.selected {
+  background-color: #fff;
+  border-color: #ff6633;
+  box-shadow: 0 4rpx 20rpx rgba(255, 102, 51, 0.2);
+}
+
+.price-option.sold-out {
+  opacity: 0.5;
+  background-color: #f0f0f0;
+}
+
+.price-info {
+  flex: 1;
+}
+
+.price-name {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 8rpx;
+}
+
+.price-desc {
+  font-size: 24rpx;
+  color: #666;
+}
+
+.price-right {
+  text-align: right;
+}
+
+.price-amount {
+  margin-bottom: 8rpx;
+}
+
+.current-price {
+  font-size: 32rpx;
+  font-weight: bold;
+  margin-right: 10rpx;
+}
+
+.original-price {
+  font-size: 24rpx;
+  color: #999;
+  text-decoration: line-through;
+}
+
+.remaining-count {
+  font-size: 24rpx;
+  color: #666;
+}
+
+/* 数量选择 */
+.quantity-section {
+  padding: 40rpx 30rpx;
+  border-bottom: 20rpx solid #f8f8f8;
+}
+
+.quantity-selector {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20rpx;
+}
+
+.quantity-btn {
+  width: 60rpx;
+  height: 60rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f0f0f0;
+  border-radius: 50%;
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #666;
+}
+
+.quantity-value {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333;
+  margin: 0 40rpx;
+  min-width: 60rpx;
+  text-align: center;
+}
+
+/* 底部购买栏 */
+.bottom-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  padding: 20rpx 30rpx;
+  padding-bottom: calc(20rpx + env(safe-area-inset-bottom));
+  background-color: #fff;
+  box-shadow: 0 -4rpx 20rpx rgba(0, 0, 0, 0.1);
+}
+
+.price-summary {
+  flex: 1;
+  margin-right: 30rpx;
+}
+
+.total-price {
+  font-size: 36rpx;
+  font-weight: bold;
+  margin-right: 10rpx;
+}
+
+.quantity-text {
+  font-size: 24rpx;
+  color: #666;
+}
+
+.purchase-btn {
+  flex-shrink: 0;
+  width: 240rpx;
+  height: 80rpx;
+  border-radius: 40rpx;
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #fff;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.purchase-btn[disabled] {
+  background-color: #ccc !important;
+  color: #999;
+}
+
+/* 弹窗样式 */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 60rpx;
+}
+
+.modal-content {
+  width: 100%;
+  max-width: 600rpx;
+  background-color: #fff;
+  border-radius: 20rpx;
+  overflow: hidden;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 40rpx 30rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.modal-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.modal-close {
+  font-size: 40rpx;
+  color: #999;
+  width: 60rpx;
+  height: 60rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-body {
+  padding: 40rpx 30rpx;
+}
+
+.order-summary {
+  background-color: #f8f8f8;
+  padding: 30rpx;
+  border-radius: 16rpx;
+  margin-bottom: 40rpx;
+}
+
+.event-title {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #333;
+  display: block;
+  margin-bottom: 10rpx;
+}
+
+.event-time {
+  font-size: 26rpx;
+  color: #666;
+  display: block;
+  margin-bottom: 10rpx;
+}
+
+.ticket-info {
+  font-size: 26rpx;
+  color: #666;
+  display: block;
+  margin-bottom: 15rpx;
+}
+
+.total-amount {
+  font-size: 36rpx;
+  font-weight: bold;
+  display: block;
+  text-align: right;
+}
+
+.form-section {
+  margin-top: 20rpx;
+}
+
+.form-item {
+  margin-bottom: 30rpx;
+}
+
+.form-label {
+  display: block;
+  font-size: 28rpx;
+  color: #333;
+  margin-bottom: 15rpx;
+}
+
+.form-input {
+  width: 100%;
+  height: 80rpx;
+  padding: 0 20rpx;
+  background-color: #f8f8f8;
+  border-radius: 12rpx;
+  font-size: 28rpx;
+  color: #333;
+  border: 1rpx solid transparent;
+}
+
+.form-input:focus {
+  border-color: #ff6633;
+  background-color: #fff;
+}
+
+.modal-footer {
+  padding: 0 30rpx 40rpx;
+}
+
+.confirm-btn {
+  width: 100%;
+  height: 80rpx;
+  border-radius: 40rpx;
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #fff;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.confirm-btn[disabled] {
+  background-color: #ccc !important;
+  color: #999;
+}

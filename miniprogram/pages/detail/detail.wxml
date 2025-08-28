@@ -1,54 +1,171 @@
-<view class="detail-container">
-  <!-- 演出海报 -->
-  <image src="{{event.poster}}" mode="widthFix" class="poster" />
-  
-  <!-- 基本信息 -->
-  <view class="info-section">
-    <view class="title">{{event.title}}</view>
-    <view class="meta">
-      <image src="/assets/icon-time.png" class="icon" />
-      <text>{{event.date}} {{event.time}}</text>
-    </view>
-    <view class="meta">
-      <image src="/assets/icon-location.png" class="icon" />
-      <text>{{event.venue}}</text>
-    </view>
-    <view class="price-range">
-      <text>¥{{event.minPrice}}</text>
-      <text wx:if="{{event.maxPrice > event.minPrice}}">- ¥{{event.maxPrice}}</text>
-    </view>
+<view class="container">
+  <!-- 加载状态 -->
+  <view wx:if="{{loading}}" class="loading-container">
+    <text>加载中...</text>
   </view>
 
-  <!-- 场次选择 -->
-  <view class="section">
-    <view class="section-title">选择场次</view>
-    <scroll-view scroll-x class="session-scroll">
-      <view 
-        wx:for="{{event.sessions}}"
-        wx:key="id"
-        class="session-item {{activeSession === item.id ? 'active' : ''}}"
-        bindtap="handleSessionTap"
-        data-id="{{item.id}}"
-      >
-        <view>{{item.date}}</view>
-        <view>{{item.time}}</view>
+  <!-- 演出详情 -->
+  <view wx:else class="detail-container">
+    <!-- 演出海报 -->
+    <view class="poster-section">
+      <image 
+        src="{{eventDetail.poster}}" 
+        class="poster-image" 
+        mode="aspectFill"
+        bindtap="onPosterTap"
+      ></image>
+      <view class="poster-overlay">
+        <view class="status-tag {{eventDetail.status}}">
+          <text wx:if="{{eventDetail.status === 'onSale'}}">在售</text>
+          <text wx:if="{{eventDetail.status === 'upcoming'}}">即将开售</text>
+          <text wx:if="{{eventDetail.status === 'soldOut'}}">售罄</text>
+        </view>
       </view>
-    </scroll-view>
+    </view>
+
+    <!-- 基本信息 -->
+    <view class="info-section">
+      <view class="title">{{eventDetail.title}}</view>
+      <view class="tags">
+        <text wx:for="{{eventDetail.tags}}" wx:key="index" class="tag">{{item}}</text>
+      </view>
+      
+      <view class="meta-info">
+        <view class="meta-item">
+          <text class="meta-label">🕐 时间</text>
+          <text class="meta-value">{{eventDetail.date}} {{eventDetail.time}}</text>
+        </view>
+        <view class="meta-item">
+          <text class="meta-label">📍 地点</text>
+          <text class="meta-value" bindtap="onAddressTap">{{eventDetail.venue}}</text>
+        </view>
+        <view class="meta-item">
+          <text class="meta-label">⏱️ 时长</text>
+          <text class="meta-value">约{{eventDetail.duration}}分钟</text>
+        </view>
+        <view class="meta-item">
+          <text class="meta-label">🎭 演员</text>
+          <text class="meta-value">{{eventDetail.performers.join('、')}}</text>
+        </view>
+      </view>
+
+      <view class="seat-info">
+        <text class="remaining-seats">剩余{{eventDetail.remainingSeats}}/{{eventDetail.totalSeats}}席</text>
+      </view>
+    </view>
+
+    <!-- 演出介绍 -->
+    <view class="description-section">
+      <view class="section-title">演出介绍</view>
+      <text class="description-text">{{eventDetail.description}}</text>
+    </view>
+
+    <!-- 价格选择 -->
+    <view class="price-section">
+      <view class="section-title">选择票价</view>
+      <view class="price-list">
+        <view 
+          wx:for="{{eventDetail.priceOptions}}" 
+          wx:key="id"
+          class="price-option {{selectedPriceOption.id === item.id ? 'selected' : ''}} {{item.remainingCount === 0 ? 'sold-out' : ''}}"
+          bindtap="onPriceOptionTap"
+          data-id="{{item.id}}"
+        >
+          <view class="price-info">
+            <view class="price-name">{{item.name}}</view>
+            <view class="price-desc" wx:if="{{item.description}}">{{item.description}}</view>
+          </view>
+          <view class="price-right">
+            <view class="price-amount">
+              <text class="current-price" style="color: {{theme.colors.primary}}">¥{{item.price}}</text>
+              <text wx:if="{{item.originalPrice}}" class="original-price">¥{{item.originalPrice}}</text>
+            </view>
+            <text class="remaining-count">余{{item.remainingCount}}张</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 数量选择 -->
+    <view class="quantity-section">
+      <view class="section-title">购买数量</view>
+      <view class="quantity-selector">
+        <view class="quantity-btn" bindtap="onQuantityChange" data-change="-1">-</view>
+        <text class="quantity-value">{{quantity}}</text>
+        <view class="quantity-btn" bindtap="onQuantityChange" data-change="1">+</view>
+      </view>
+    </view>
   </view>
 
-  <!-- 演出详情（长图） -->
-  <view class="section">
-    <view class="section-title">演出详情</view>
-    <image 
-      src="{{event.detailImage}}" 
-      mode="widthFix" 
-      class="detail-image"
-      binderror="handleImageError"
-    />
+  <!-- 底部购买栏 -->
+  <view wx:if="{{!loading}}" class="bottom-bar">
+    <view class="price-summary">
+      <text class="total-price" style="color: {{theme.colors.primary}}">¥{{selectedPriceOption.price * quantity}}</text>
+      <text class="quantity-text">{{quantity}}张</text>
+    </view>
+    <button 
+      class="purchase-btn" 
+      bindtap="onPurchaseTap"
+      style="background-color: {{theme.colors.primary}}"
+      disabled="{{eventDetail.status !== 'onSale'}}"
+    >
+      {{eventDetail.status === 'onSale' ? '立即购买' : (eventDetail.status === 'upcoming' ? '即将开售' : '已售罄')}}
+    </button>
   </view>
 
-  <!-- 底部购票按钮 -->
-  <view class="footer">
-    <button class="buy-btn" bindtap="handleBuyClick">立即购票</button>
+  <!-- 购买弹窗 -->
+  <view wx:if="{{showPurchaseModal}}" class="modal-overlay" bindtap="onClosePurchaseModal">
+    <view class="modal-content" catchtap="">
+      <view class="modal-header">
+        <text class="modal-title">填写购票信息</text>
+        <text class="modal-close" bindtap="onClosePurchaseModal">✕</text>
+      </view>
+      
+      <view class="modal-body">
+        <view class="order-summary">
+          <text class="event-title">{{eventDetail.title}}</text>
+          <text class="event-time">{{eventDetail.date}} {{eventDetail.time}}</text>
+          <text class="ticket-info">{{selectedPriceOption.name}} × {{quantity}}</text>
+          <text class="total-amount" style="color: {{theme.colors.primary}}">¥{{selectedPriceOption.price * quantity}}</text>
+        </view>
+
+        <view class="form-section">
+          <view class="form-item">
+            <text class="form-label">联系人姓名</text>
+            <input 
+              class="form-input" 
+              placeholder="请输入姓名" 
+              value="{{userInfo.name}}"
+              bindinput="onUserInfoInput"
+              data-field="name"
+            />
+          </view>
+          
+          <view class="form-item">
+            <text class="form-label">手机号码</text>
+            <input 
+              class="form-input" 
+              placeholder="请输入手机号" 
+              type="number"
+              value="{{userInfo.phone}}"
+              bindinput="onUserInfoInput"
+              data-field="phone"
+            />
+          </view>
+        </view>
+      </view>
+
+      <view class="modal-footer">
+        <button 
+          class="confirm-btn" 
+          bindtap="onConfirmPurchase"
+          loading="{{purchasing}}"
+          disabled="{{purchasing}}"
+          style="background-color: {{theme.colors.primary}}"
+        >
+          {{purchasing ? '处理中...' : '确认购买'}}
+        </button>
+      </view>
+    </view>
   </view>
 </view>
