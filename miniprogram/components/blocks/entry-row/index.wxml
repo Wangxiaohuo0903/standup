@@ -1,0 +1,8 @@
+<view class="row">
+  <block wx:for="{{items}}" wx:key="text">
+    <view class="item" bindtap="go" data-link="{{item.link}}">
+      <image class="icon" src="{{item.iconSrc || ''}}" />
+      <text class="txt">{{item.text}}</text>
+    </view>
+  </block>
+</view>

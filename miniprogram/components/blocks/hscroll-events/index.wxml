@@ -1,0 +1,24 @@
+<view class="section">
+  <view class="hd">
+    <text class="title">{{title}}</text>
+    <text class="more" bindtap="more">更多</text>
+  </view>
+  <scroll-view class="cards" scroll-x enable-flex>
+    <block wx:for="{{items}}" wx:key="id">
+      <view class="card" bindtap="open" data-id="{{item.id}}">
+        <image class="poster" src="{{item.poster}}" mode="aspectFill"/>
+        <view class="meta">
+          <text class="date">{{item.date}} · {{item.time}}</text>
+          <text class="t">{{item.title}}</text>
+          <text class="venue">{{item.city}} · {{item.venue}}</text>
+          <view class="line">
+            <text class="price">¥{{item.priceFrom}}起</text>
+            <text wx:if="{{item.status==='onSale'}}" class="tag green">在售</text>
+            <text wx:elif="{{item.status==='upcoming'}}" class="tag blue">预告</text>
+            <text wx:elif="{{item.status==='soldOut'}}" class="tag gray">售罄</text>
+          </view>
+        </view>
+      </view>
+    </block>
+  </scroll-view>
+</view>

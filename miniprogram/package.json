@@ -1,0 +1,15 @@
+{
+    "name": "standup-miniapp",
+    "private": true,
+    "scripts": {
+        "dev:dt": "node scripts/build.mjs --tenant=dt && tsc -p tsconfig.build.json -w",
+        "dev:xclub": "node scripts/build.mjs --tenant=xclub && tsc -p tsconfig.build.json -w",
+        "build:ts": "tsc -p tsconfig.build.json",
+        "typecheck": "tsc --noEmit -p tsconfig.json"
+      },
+      "devDependencies": {
+        "miniprogram-api-typings": "^3.12.0",
+        "typescript": "^5.5.4"
+      }
+  }
+  

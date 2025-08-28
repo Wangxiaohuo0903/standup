@@ -1,7 +1,10 @@
 {
-    "usingComponents": {  
-        "event-card": "/components/event-card/event-card"
-    },
-    "navigationBarTitleText": "推荐演出",
-    "enablePullDownRefresh": false
+    "navigationBarTitleText": "脱口秀票务",
+    "usingComponents": {
+      "block-banner": "/components/blocks/banner/index",
+      "block-entry-row": "/components/blocks/entry-row/index",
+      "block-hscroll-events": "/components/blocks/hscroll-events/index",
+      "block-hscroll-merch": "/components/blocks/hscroll-merch/index"
+    }
   }
+  

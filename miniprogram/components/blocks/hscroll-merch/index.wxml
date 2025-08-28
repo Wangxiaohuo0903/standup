@@ -1,0 +1,12 @@
+<view class="section">
+  <view class="hd"><text class="title">{{title}}</text></view>
+  <scroll-view class="cards" scroll-x enable-flex>
+    <block wx:for="{{items}}" wx:key="id">
+      <view class="mcard">
+        <image class="img" src="{{item.img}}" mode="aspectFill"/>
+        <text class="name">{{item.title}}</text>
+        <text class="price">¥{{item.price}}</text>
+      </view>
+    </block>
+  </scroll-view>
+</view>

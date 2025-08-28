@@ -1,29 +1,29 @@
-<!-- 顶部轮播图 -->
-<swiper indicator-dots="{{true}}" autoplay="{{true}}" interval="5000">
-  <block wx:for="{{banners}}" wx:key="id">
-    <swiper-item>
-      <image src="{{item.imageUrl}}" mode="aspectFill" class="banner-img" />
-    </swiper-item>
-  </block>
-</swiper>
-
-<!-- 分类筛选 -->
-<scroll-view scroll-x class="category-scroll">
-  <view 
-    wx:for="{{categories}}"
-    wx:key="id"
-    class="category-item {{activeCategory === item.id ? 'active' : ''}}"
-    bindtap="handleCategoryTap"
-    data-id="{{item.id}}"
-  >
-    {{item.name}}
+<view class="page" style="background:#fff;">
+  <!-- 调试：能看到品牌名就说明 theme/schema 已加载 -->
+  <view class="brand">
+    <text>品牌：{{theme.name || 'N/A'}}</text>
+    <text style="margin-left:20rpx;">sections: {{sections.length}}</text>
   </view>
-</scroll-view>
 
-<!-- 推荐演出 -->
-<view class="section-title">推荐演出</view>
-<view class="event-list">
-  <block wx:for="{{recommendEvents}}" wx:key="id">
-    <event-card event="{{item}}" />
+  <!-- 按 schema 渲染 -->
+  <block wx:for="{{sections}}" wx:key="index">
+    <block wx:if="{{item.type==='banner'}}">
+      <block-banner banners="{{homeData.banners || []}}" />
+    </block>
+
+    <block wx:elif="{{item.type==='entryRow'}}">
+      <block-entry-row items="{{item.items || []}}" />
+    </block>
+
+    <block wx:elif="{{item.type==='hscrollEvents'}}">
+      <block-hscroll-events title="{{item.title}}" items="{{homeData[item.dataKey] || []}}" />
+    </block>
+
+    <block wx:elif="{{item.type==='hscrollMerch'}}">
+      <block-hscroll-merch wx:if="{{features.enableMerch}}" title="{{item.title}}" items="{{homeData.merch || []}}" />
+    </block>
   </block>
+
+  <view wx:if="{{loading}}" class="skeleton">加载中...</view>
+  <view wx:if="{{!loading && empty}}" class="empty">暂无内容</view>
 </view>

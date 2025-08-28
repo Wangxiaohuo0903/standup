@@ -1,0 +1,17 @@
+.section{ background:#fff; margin-top:20rpx; padding:0 24rpx 24rpx; }
+.hd{ display:flex; justify-content:space-between; align-items:center; height:88rpx; }
+.title{ font-size:32rpx; font-weight:600; }
+.more{ color:#888; font-size:26rpx; }
+.cards{ white-space:nowrap; }
+.card{ width:440rpx; display:inline-block; border-radius:20rpx; overflow:hidden; margin-right:20rpx; box-shadow:0 6rpx 20rpx rgba(0,0,0,.06); }
+.poster{ width:100%; height:260rpx; display:block; }
+.meta{ padding:18rpx; }
+.date{ color:#888; font-size:24rpx; }
+.t{ display:block; font-size:30rpx; font-weight:600; margin:6rpx 0; }
+.venue{ color:#666; font-size:24rpx; }
+.line{ display:flex; justify-content:space-between; align-items:center; margin-top:8rpx; }
+.price{ color:#111; font-weight:700; }
+.tag{ padding:4rpx 12rpx; border-radius:999rpx; font-size:22rpx; }
+.tag.blue{ background:#e8f2ff; color:#246; }
+.tag.green{ background:#e9fbef; color:#264; }
+.tag.gray{ background:#f0f0f0; color:#666; }
